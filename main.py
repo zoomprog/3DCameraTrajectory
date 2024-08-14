@@ -2,6 +2,7 @@ import cv2
 import numpy as np
 import glob
 import matplotlib.pyplot as plt
+import pandas as pd  # Import pandas for CSV handling
 
 # Получение списка всех файлов изображений в папке
 image_paths = glob.glob('sphere_sfm/*.jpg')
@@ -77,6 +78,14 @@ for H in H_list:
 
 for i, pose in enumerate(trajectory):
     print(f"Позиция камеры {i}: \n{pose}")
+
+# Сохранение траектории камеры в CSV файл
+trajectory_data = np.array([pose.flatten() for pose in trajectory])
+df = pd.DataFrame(trajectory_data, columns=['R11', 'R12', 'R13', 'T1',
+                                             'R21', 'R22', 'R23', 'T2',
+                                             'R31', 'R32', 'R33', 'T3',
+                                             'R41', 'R42', 'R43', 'T4'])
+df.to_csv('camera_trajectory.csv', index=False)
 
 # Визуализация траектории камеры
 fig = plt.figure()
